@@ -1,0 +1,9 @@
+body{
+    background-color: white;
+}
+
+.photo {
+    display: block;
+    margin-left: auto;
+    margin-right: right
+}
