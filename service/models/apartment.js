@@ -5,6 +5,7 @@ const mongoose = require('mongoose'),
 const schema = new Schema ({
 landLord: {type: Schema.Types.ObjectId, ref: 'User' ,required:true, unique: true},
 coordinate: {type:String, required:true},
+apartmentNumber: {type:Number, required:false}, //to handle incase of villa where there's one apartment in the building
 numberOfRooms: {type: Number, required:true},
 numberOfBeds: {type: Number, required:true},
 startDate: {type:Date, require: true},

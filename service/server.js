@@ -11,6 +11,14 @@ app.set('port', port);
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
 app.use(logger('dev'));
+app.use(
+    (req, res, next) => {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept');
+      res.set('Content-Type', 'application/json');
+      next();
+    });
 
 // require('./db_connections');
 
