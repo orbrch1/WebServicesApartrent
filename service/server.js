@@ -7,6 +7,7 @@ const   {userRouter} = require('./routers/userRouter'),
 const app = Express();
 const port = process.env.PORT || 3000;
 
+app.set('port', port);
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
 app.use(logger('dev'));

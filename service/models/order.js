@@ -5,12 +5,7 @@ const mongoose = require('mongoose'),
 const schema = new Schema ({
 landLord: {type: Schema.Types.ObjectId, ref: 'User' ,required:true, unique: true},
 tenant: {type: Schema.Types.ObjectId, ref: 'User' ,required:true, unique: true},
-name: {type:String, required:true},
-gender: {type: String, enum: ['male','female'] ,required:true},
-username: {type: String, required:true},
-email: {type: String, required:true},
-phone:{type: String, required:false},
-numberOfRents: {type: Number, required:true}
+amountToPay: {type: Number,required:true} //BI handles the math (per days includes dicounts if any)
 }, {
     collection: 'orders'
 });

@@ -1,7 +1,7 @@
 const Review  = require('../models/review');
 
 const mongoose = require('mongoose');
-const mongodb = require('../mongodb');
+const mongodb = require('../database');
 
 exports.reviewController = {
     getAllReviews(req, res, next) {
@@ -40,17 +40,18 @@ exports.reviewController = {
       mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
         .then(async() => {
           const {
-            id = null,
+            id = null, // needed ???
             content = null,
-            userId = null,
-            parentReviewId = null
+            user = null,
+            levels = null
+            
           } = req.body;
           console.log("req.body");
           console.log(req.body);
-          console.log(`id = ${id}, content = ${content}, userId = ${userId}, parentReviewId = ${parentReviewId}`);
+          console.log(`id = ${id}, content = ${content}, user = ${user}, levels = ${levels}`);
           if(!(content == ' ' || content.length == 0 || FormData.connect.value =="" || content.length > 280))
           {
-            const review = new Review({id, content, userId, parentReviewId});
+            const review = new Review({id, content, user, levels});
             console.log(review);
             const result = await review.save();
             console.log(result);
@@ -70,9 +71,9 @@ exports.reviewController = {
       mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
       .then(async() => {
         const {id = null} = req.params;  
-        const {userId = null, content = null, parentReviewtId = null} = req.body;
+        const {user = null, content = null, levels = null} = req.body;
         if(!(content == ' ' || content.length == 0 || content.length > 280)){
-          const result = await Review.updateOne({_id: id}, {userId, content, parentReviewId})   // _id with '_' because mongo generate it auto for us. format-> {generated id KEY : our id (null) VALUE, all the params to update}    
+          const result = await Review.updateOne({_id: id}, {user, content, levels})   // _id with '_' because mongo generate it auto for us. format-> {generated id KEY : our id (null) VALUE, all the params to update}    
         }     
           
         if(result) res.json(result)

@@ -1,7 +1,7 @@
 const Apartment  = require('../models/apartment');
 
 const mongoose = require('mongoose');
-const mongodb = require('../mongodb');
+const mongodb = require('../database');
 
 exports.apartmentController = {
     getAllApartments(req, res, next) {
