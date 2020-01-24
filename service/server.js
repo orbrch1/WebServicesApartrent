@@ -1,17 +1,17 @@
 const Express = require('express');
 const logger = require('morgan'); // NOTE: for debugging
-const   {userRouter} = require('./routers/userRouter'),
-        {reviewRouter } = require('./routers/reviewRouter'),
-        {orderRouter} = require('./routers/orderRouter'),
-        {apartmentRouter} = require('./routers/apartmentRouter')
+const   {userRouter} = require('./routers/userRouter');
+        // {reviewRouter } = require('./routers/reviewRouter'),
+        // {orderRouter} = require('./routers/orderRouter'),
+        // {apartmentRouter} = require('./routers/apartmentRouter')
 const app = Express();
 const port = process.env.PORT || 3000;
 
-app.set('port', port);
+// app.set('port', port);
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
 app.use(logger('dev'));
-app.use(
+app.get(
     (req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers',
@@ -20,14 +20,15 @@ app.use(
       next();
     });
 
-// require('./db_connections');
+app.get('/user/*', userRouter);
+// app.use('/review', reviewRouter);
+// app.use('/order', orderRouter);
+// app.use('/apartment', apartmentRouter);
 
-app.use('/user', userRouter);
-app.use('/review', reviewRouter);
-app.use('/order', orderRouter);
-app.use('/apartment', apartmentRouter);
-// app.use('/account', orderRouter);
 
+app.all('*', (req, res) => {
+  res.status(404).send('Unsupported Route!');
+})
 
 //exception catch
 app.use((err, req, res, next) => {

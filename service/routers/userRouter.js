@@ -5,8 +5,8 @@ const {
 
 const userRouter = new Router();
 
-userRouter.get('/all', userController.getAllUsers);
-userRouter.get('/', userController.getAllUsers);
+userRouter.get('/user/getAllUsers', userController.getAllUsers);
+// userRouter.get('/', userController.getAllUsers);
 // userRouter.get('/:id', userController.getUserById);
 // userRouter.post('/', userController.addUser);
 // userRouter.put('/:id', userController.editUser);

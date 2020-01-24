@@ -1,17 +1,24 @@
 /* Mongoose connection using events */
 const mongoose = require('mongoose');
-const { DB_CLUSTER, DB_USER, DB_PASS, DB_HOST } = require('./constants');
-// const { DB_CLUSTER, DB_USER, DB_PASS, DB_HOST } = process.env.DB_CLUSTER ? process.env : require('./constants');
-// const { DB_CLUSTER, DB_USER, DB_PASS, DB_HOST } = process.env;
+const {DB_USER, DB_PASS, DB_HOST } = require('./constants');
 
-// mongodb+srv://orbrch1:<password>@tweetmongodbcluster-bkahm.mongodb.net/test?retryWrites=true&w=majority
-const connectionString = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_CLUSTER}-${DB_HOST}`;
+const connectionString = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}`;
+ // mongodb+srv://orbrch1:<password>@cluster0-bkahm.mongodb.net/test?retryWrites=true&w=majority
+
+//  const connectionString = `mongodb+srv://orbrch1:ormongodb3!@cluster0-bkahm.mongodb.net/test?retryWrites=true&w=majority`;
+ 
+// console.log(DB_USER);
+// console.log(DB_PASS);
+// console.log(DB_HOST);
+console.log(connectionString);
+
 // console.log(connectionString);
 
 const options = {
   useCreateIndex: true,
   useNewUrlParser: true,
-  useUnifiedTopology: true // To remove annoying warning
+  useUnifiedTopology: true // To remove annoying warning,
+// autoReconnect: true,
 };
 
 mongoose.connect(connectionString, options)
@@ -22,3 +29,21 @@ module.exports = {
     mongoDbOptions: options,
     mongoDbUrl: connectionString
 };
+
+// const mongoose = require('mongoose');
+// const consts = require('./consts');
+
+// const { MLAB_URL, DB_USER, DB_PASS } = consts;
+// const url = MLAB_URL;
+// const options = {
+//  useNewUrlParser: true, // For deprecation warnings
+//  useCreateIndex: true, // For deprecation warnings
+//  user: DB_USER,
+//  pass: DB_PASS,
+//  autoReconnect: true,
+// };
+
+// mongoose
+//  .connect(url, options)
+//  .then(() => console.log('connected'))
+//  .catch(err => console.log(`connection error: ${err}`))
