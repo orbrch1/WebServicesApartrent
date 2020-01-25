@@ -6,14 +6,12 @@ const {
 const userRouter = new Router();
 
 userRouter.get('/user/getAllUsers', userController.getAllUsers);
-// userRouter.get('/', userController.getAllUsers);
-// userRouter.get('/:id', userController.getUserById);
-// userRouter.post('/', userController.addUser);
-// userRouter.put('/:id', userController.editUser);
-// userRouter.delete('/:id', userController.removeUser);
+userRouter.get('/user/', userController.getAllUsers);
+userRouter.get('/user/:id', userController.getUserById);
+userRouter.post('/user/', userController.addUser);
+userRouter.put('/user/:id', userController.editUser);
+userRouter.delete('/user/:id', userController.removeUser);
 // userRouter.get('/:id', userController.get);
-// userRouter.post('/', userController.post);
-// userRouter.put('/:id', userController.put);
 
 // //settings
 // orderRouter.get('/:id', orderController.get);

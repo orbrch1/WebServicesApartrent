@@ -13,7 +13,7 @@ endDate: {type:Date, require: true},
 isFurnished: {type: String, enum: ['yes','no','partial'] ,required:true},
 numOfParking: {type: Number ,required:true},
 hasAC: {type: Boolean, default:false, required:true},
-price: {type: Number, required: true},
+pricePerDay: {type: Number, required: true},
 inUse: {type: Boolean, default:false, required:true},
 }, {
     collection: 'apartments'

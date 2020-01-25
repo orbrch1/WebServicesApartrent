@@ -5,12 +5,12 @@ const {
 
 const orderRouter = new Router();
 
-orderRouter.get('/all', orderController.getAllOrders);
-orderRouter.get('/', orderController.getAllOrders);
-// orderRouter.get('/:id', orderRouter.getOrderById);
-// orderRouter.post('/', orderRouter.addOrder);
-// orderRouter.put('/:id', orderRouter.editOrder);
-// orderRouter.delete('/:id', orderRouter.removeOrder);
+orderRouter.get('/order/getAllOrders', orderController.getAllOrders);
+orderRouter.get('/order/', orderController.getAllOrders);
+orderRouter.get('/order/:id', orderController.getOrderById);
+orderRouter.post('/order/', orderController.addOrder);
+orderRouter.put('/order/:id', orderController.editOrder);
+orderRouter.delete('/order/:id', orderController.removeOrder);
 
 module.exports = {
     orderRouter,

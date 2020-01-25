@@ -20,7 +20,8 @@ app.get(
       next();
     });
 
-app.get('/user/*', userRouter);
+//app.use('/user/*', userRouter);
+app.use('/user', userRouter);
 // app.use('/review', reviewRouter);
 // app.use('/order', orderRouter);
 // app.use('/apartment', apartmentRouter);

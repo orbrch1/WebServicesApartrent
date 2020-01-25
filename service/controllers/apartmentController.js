@@ -3,6 +3,35 @@ const Apartment  = require('../models/apartment');
 const mongoose = require('mongoose');
 const mongodb = require('../database');
 
+function ValidateNumOfRooms(NumberOfRooms) {
+  if(!(NumberOfRooms < 1 || FormData.NumberOfRooms.value =="" || NumberOfRooms > 20 ))
+  {
+    return (true)
+  }
+    console.log("You have entered an invalid number Of rooms!")
+    return (false)
+}
+
+function ValidateCoordinate(coordinate) {
+  if(!(coordinate == ' ' || coordinate.length == 0 || FormData.coordinate.value =="" || 
+  /^([-+]?)([\d]{1,2})(((\.)(\d+)(,)))(\s*)(([-+]?)([\d]{1,3})((\.)(\d+))?)$/.test(coordinate)))
+  {
+    return (true)
+  }
+    console.log("You got bad coordinates!")
+    return (false)
+}
+
+function ValidatePricePerDay(PricePerDay) {
+  if(!(PricePerDay < 1 || FormData.NumberOfRooms.value =="" || PricePerDay > 10000 ))
+  {
+    return (true)
+  }
+    console.log("You have entered an invalid price per day!")
+    return (false)
+}
+
+
 exports.apartmentController = {
     getAllApartments(req, res, next) {
       mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
