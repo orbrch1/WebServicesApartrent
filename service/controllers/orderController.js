@@ -12,6 +12,16 @@ function ValidateUser(user) {
     return (false)
 }
 
+function calcAmountToPay(tenantStartDate, tenantEndDate, pricePerDay, numberOfRents)
+{
+  if(numberOfRents >= 0) {
+    const amountToPay = math(tenantStartDate - tenantEndDate) * pricePerDay * (1 - discount)
+    return (amountToPay);
+  }
+    console.log("Something is wrong with number of rents")
+    return (false)
+}
+
 exports.orderController = {
   getAllOrders(req, res, next) {
     mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
@@ -56,9 +66,10 @@ exports.orderController = {
           }  = req.body;
         console.log("req.body");
         console.log(req.body);
-        console.log(`id = ${id}, landLord = ${landLord}, tenant = ${tentant}, amountToPay = ${amountToPay} `);
+        console.log(`id = ${id}, landLord = ${landLord}, tenant = ${tenant}, amountToPay = ${amountToPay} `);
         if(ValidateUser(tenant) && ValidateUser(landLord))
         {
+          amountToPay = calcAmountToPay(tenantStartDate, tenantEndDate, pricePerDay, numberOfRents);   //is the right way ?
           const order = new Order({id, landLord, tenant, amountToPay});
           console.log(order);
           const result = await order.save();
@@ -81,7 +92,9 @@ exports.orderController = {
       const {id = null} = req.params;  
       const {landLord = null, name = null, tenant = null, amountToPay = null, email = null, phone = null, /*numberOfRents = null?? auto  */ } = req.body; // why null on edit and not restoring ?
       if(ValidateUser(tenant) && ValidateUser(landLord)){
-        const result = await Order.updateOne({_id: id}, {landLord, tenant, amountToPay})   // amountToPay needs to be updated
+        // pricePerDay = ?  needs to import from apartment ?
+        amountToPay = calcAmountToPay(tenantStartDate, tenantEndDate, pricePerDay, numberOfRents);
+        const result = await Order.updateOne({_id: id}, {landLord, tenant, tenantStartDate, tenantEndDate, amountToPay})   // amountToPay needs to be updated
       }     
         
       if(result) res.json(result)

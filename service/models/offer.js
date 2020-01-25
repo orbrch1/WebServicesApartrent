@@ -7,6 +7,8 @@ const schema = new Schema ({
     tenant: {type: Schema.Types.ObjectId, ref: 'User' ,required:true, unique: true},
     tenantStartDate: {type:Date, require: true},
     tenantEndDate: {type:Date, require: true},
+    landLordStartDate: {type:Date, ref: 'Apartment', require: true},
+    landLordEndDate: {type:Date, ref: 'Apartment' , require: true},
     currentDate: {type:Date, require:true}
  }, {
     collection: 'offers'

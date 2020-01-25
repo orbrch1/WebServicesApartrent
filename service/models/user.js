@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema ({
     phone:{type: String, required:false},
     registertionDate: {type: Date, require: true},
     //DateOfBirth: {type:Date, require: true},
-    numberOfRents: {type: Number, required:true}
+    numberOfRents: {type: Number, required:true},
+    discount: {type:Number, required:true} //to update the rest
     }, {
         collection: 'users'
     });

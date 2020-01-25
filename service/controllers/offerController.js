@@ -1,4 +1,4 @@
-const Review  = require('../models/review');
+const Offer  = require('../models/offer');
 
 const mongoose = require('mongoose');
 const mongodb = require('../database');
@@ -63,15 +63,15 @@ exports.offerController = {
           landLord = null,
           tenantStartDate = null,
           tenantEndDate = null,
-       //   currentDate = new Date();    const ? 
+          currentDate = new Date()
         } = req.body;
         console.log("req.body");
         console.log(req.body);
-        console.log(`id = ${id}, tenant = ${tenant}, landLord = ${landLord}, tenantStartDate = ${tenantStartDate}, tenantEndDate = ${tenantEndDate}`);
+        console.log(`id = ${id}, tenant = ${tenant}, landLord = ${landLord}, tenantStartDate = ${tenantStartDate}, tenantEndDate = ${tenantEndDate}, currentDate = ${currentDate}`);
      //   if(ValidateDates(tenantStartDate, tenantEndDate, landLord.apartment.startDate, landLord.apartment.landLordEndDate, currentDate)   import aprt's dates
      //   && ValidateUser(tenant) && ValidateUser(landLord))
         {
-          const offer = new Offer({id, tenant, landLord, tenantStartDate, tenantEndDate});
+          const offer = new Offer({id, tenant, landLord, tenantStartDate, tenantEndDate, currentDate});
           console.log(offer);
           const result = await offer.save();
           console.log(result);
@@ -91,11 +91,11 @@ exports.offerController = {
     mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
     .then(async() => {
       const {id = null} = req.params;  
-      const {tenant = null, landLord = null, tenantStartDate = null, tenantEndDate = null} = req.body; // null or existed value ?
+      const {tenant = null, landLord = null, tenantStartDate = null, tenantEndDate = null, currentDate = new Date(),} = req.body; // null or existed value ?
     //   if(ValidateDates(tenantStartDate, tenantEndDate, landLord.apartment.startDate, landLord.apartment.landLordEndDate, currentDate)   import aprt's dates
     //   && ValidateUser(tenant) && ValidateUser(landLord)) 
       {
-        const result = await Offer.updateOne({_id: id}, {tenant, landLord, tenantStartDate, tenantEndDate})  
+        const result = await Offer.updateOne({_id: id}, {tenant, landLord, tenantStartDate, tenantEndDate, currentDate})  
       }     
         
       if(result) res.json(result)

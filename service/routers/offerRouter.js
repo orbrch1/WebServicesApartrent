@@ -5,7 +5,7 @@ const {
 
 const reviewRouter = new Router();
 
-offerRouter.get('/offer/getAllOffers', reviewController.getAllOffers);
+offerRouter.get('/offer/getAllOffers', offerController.getAllOffers);
 offerRouter.get('/offer/', offerController.getAllOffers);
 offerRouter.get('/offer/:id', offerController.getOfferById);
 offerRouter.post('/offer/', offerController.addOffer);
@@ -19,6 +19,6 @@ offerRouter.delete('/offer/:id', offerController.removeOffer);
 // orderRouter.delete('/:id', orderController.delete);
 
 module.exports = {
-    reviewRouter,
+    offerRouter,
 };
    
