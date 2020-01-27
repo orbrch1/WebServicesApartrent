@@ -10,8 +10,6 @@ const connectionString = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}`;
 // console.log(DB_USER);
 // console.log(DB_PASS);
 // console.log(DB_HOST);
-console.log(connectionString);
-
 // console.log(connectionString);
 
 const options = {

@@ -2,8 +2,9 @@ const Review  = require('../models/review');
 
 const mongoose = require('mongoose');
 const mongodb = require('../database');
+let dateNow = new Date();
 
-function ValidateContent(content) {
+function validateContent(content) {
   if(!(content == ' ' || content.length == 0 || FormData.content.value =="" || content.length < 2 || content.length > 20 ))
   {
     return (true)
@@ -12,7 +13,7 @@ function ValidateContent(content) {
     return (false)
 }
 
-function ValidateLevels(levels) {
+function validateLevels(levels) {
   if(!(levels < 1 || levels> 5 ))
   {
     return (true)
@@ -21,7 +22,7 @@ function ValidateLevels(levels) {
     return (false)
 }
 
-function ValidateUser(user) {
+function validateUser(user) {
   if(!(user == null ))
   {
     return (true)
@@ -31,6 +32,7 @@ function ValidateUser(user) {
 }
 
 exports.reviewController = {
+  //Views
   getAllReviews(req, res, next) {
     let result = [];
     console.log("Received a request...");
@@ -41,11 +43,13 @@ exports.reviewController = {
       })
       .catch(err => console.log(`query error: ${err}`));
   },
-  getReviewById(req, res, next) {
+
+  //Apartment Reviews
+  getReviewByApartment(req, res, next) {
     mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
     .then(async() => {
       const {id = null} = req.params;
-      const result = await Review.findOne({_id: id});
+      const result = await Review.findOne({apartment: id});
 
       if(result) res.json(result)
       else res.status(404).send(`review with the id ${id} has not been found`);
@@ -55,6 +59,9 @@ exports.reviewController = {
       res.status(500).send(err.message);
     })
   },
+
+ 
+
   addReview(req, res, next) {
     console.log('new entity saved!');
     // const { body } = req;
@@ -64,16 +71,16 @@ exports.reviewController = {
     mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
       .then(async() => {
         const {
-          id = null, // needed ???
           content = null,
           user = null,
-          levels = null
-          
+          levels = null,
+          currentDate = dateNow.now(),
+          apartment=null
         } = req.body;
         console.log("req.body");
         console.log(req.body);
-        console.log(`id = ${id}, content = ${content}, user = ${user}, levels = ${levels}`);
-        if(ValidateContent(content) && ValidateUser(user) && ValidateLevels(levels))
+        console.log(`id = ${id}, content = ${content}, user = ${user}, levels = ${levels}, currentDate = ${currentDate},apartment= ${apartment}`);
+        if(validateContent(content) && validateUser(user) && validateLevels(levels))
         {
           const review = new Review({id, content, user, levels});
           console.log(review);
@@ -95,8 +102,8 @@ exports.reviewController = {
     mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
     .then(async() => {
       const {id = null} = req.params;  
-      const {user = null, content = null, levels = null} = req.body; // null or existed value ?
-      if(ValidateLevels(levels) && ValidateContent(content) && ValidateUser(user)){
+      const { content = null, levels = null,currentDate = dateNow.now()} = req.body; // null or existed value ?
+      if(validateLevels(levels) && validateContent(content) && validateUser(user)){
         const result = await Review.updateOne({_id: id}, {user, content, levels})  
       }     
         

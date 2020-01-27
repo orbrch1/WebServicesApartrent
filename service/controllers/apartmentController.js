@@ -3,7 +3,7 @@ const Apartment  = require('../models/apartment');
 const mongoose = require('mongoose');
 const mongodb = require('../database');
 
-function ValidateNumOfRooms(NumberOfRooms) {
+function validateNumOfRooms(NumberOfRooms) {
   if(!(NumberOfRooms < 1 || FormData.NumberOfRooms.value =="" || NumberOfRooms > 20 ))
   {
     return (true)
@@ -12,7 +12,7 @@ function ValidateNumOfRooms(NumberOfRooms) {
     return (false)
 }
 
-function ValidateCoordinate(coordinate) {
+function validateCoordinate(coordinate) {
   if(!(coordinate == ' ' || coordinate.length == 0 || FormData.coordinate.value =="" || 
   /^([-+]?)([\d]{1,2})(((\.)(\d+)(,)))(\s*)(([-+]?)([\d]{1,3})((\.)(\d+))?)$/.test(coordinate)))
   {
@@ -22,7 +22,7 @@ function ValidateCoordinate(coordinate) {
     return (false)
 }
 
-function ValidatePricePerDay(PricePerDay) {
+function validatePricePerDay(PricePerDay) {
   if(!(PricePerDay < 1 || FormData.NumberOfRooms.value =="" || PricePerDay > 10000 ))
   {
     return (true)
@@ -33,7 +33,7 @@ function ValidatePricePerDay(PricePerDay) {
 
 
 exports.apartmentController = {
-    getAllApartments(req, res, next) {
+  getAllApartments(req, res, next) {
       mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
       .then(async() => {
         const result = await Apartment.find({})
@@ -46,71 +46,57 @@ exports.apartmentController = {
         res.status(500).send(err.message)
       });
     },
-    getApartmentById(req, res, next) {
-    mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
-    .then(async() => {
-      const {id = null} = req.params;
-      const result = await Apartment.findOne({_id: id});
 
-      if(result) res.json(result)
-      else res.status(404).send(`apartment with the id ${id} has not been found`);
-    })
-    .catch(err => {
-      console.error('some error occurred', err);
-      res.status(500).send(err.message);
-    })
+    getApartmentsByUserId(req,res,next) {
+      // let userIdAsObjectId = mongoose.Types.ObjectId(req.params.id);
+      // User.findOne({_id: userIdAsObjectId})
+      // .then(userResult => {
+      //   // console.log(userResult);
+      //   return res.json(userResult);
+      // })
+      // .catch(err => console.log(`query error: ${err}`));
     },
-    addapartment(req, res, next) {
-      console.log('new entity saved!');
-      // const { body } = req;
-      // restaurant.push(body);
-      // res.send('new entity saved!');
-
-      mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
-        .then(async() => {
-          const {
-            id = null,
-            content = null,
-            userId = null,
-            parentReviewId = null
-          } = req.body;
-          console.log("req.body");
-          console.log(req.body);
-          console.log(`id = ${id}, content = ${content}, userId = ${userId}, parentReviewId = ${parentReviewId}`);
-          if(!(content == ' ' || content.length == 0 || FormData.connect.value =="" || content.length > 280))
-          {
-            const apartment = new Apartment({id, content, userId, parentReviewId});
-            console.log(apartment);
-            const result = await apartment.save();
-            console.log(result);
-          }
-          if(result) {
-            res.json(result);
-          }
-          else {
-            res.status(404).send('not found');
-          }
-        }).catch(err => {
-          console.error("Some error occured", err);
-          res.status(500).send(err);
-        })
+    getApartmentByUserId(req, res, next) {
+      let userIdAsObjectId = mongoose.Types.ObjectId(req.params.id);
+      Apartment.find({landLord: userIdAsObjectId})
+      .then(apartmentResult => {
+        // console.log(userResult);
+        return res.json(apartmentResult);
+      })
+      .catch(err => console.log(`query error: ${err}`));
     },
-    editApartment(req,res,next){
-      mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
-      .then(async() => {
-        const {id = null} = req.params;  
-        const {userId = null, content = null, parentReviewtId = null} = req.body;
-        if(!(content == ' ' || content.length == 0 || content.length > 280)){
-          const result = await Aapartment.updateOne({_id: id}, {userId, content, parentReviewId})   // _id with '_' because mongo generate it auto for us. format-> {generated id KEY : our id (null) VALUE, all the params to update}    
-        }     
-          
-        if(result) res.json(result)
-        else res.status(404).send(`review with the id ${id} has not been found`);
-      })
-      .catch(err => {
-        console.error("Some error occured", err);
-        res.status(500).send(err);
-      })
+      addApartment(req,res,next) {
+        const {
+          landLord = null,
+          coordinate = null,    
+          apartmentNumber = null,
+          numberOfRooms = 0,
+          numberOfBeds = 0,
+          isFurnished = false,
+          numOfParking = null,
+          hasAC = false,
+          inUse = false
+        } = req.body;
+  
+      
+      const apartment = new Apartment({
+        landLord: landLord,
+        coordinate: coordinate,
+        apartmentNumber: apartmentNumber,
+        numberOfRooms: numberOfRooms,
+        numberOfBeds: numberOfBeds,
+        isFurnished: isFurnished,
+        numOfParking: numOfParking,
+        hasAC: hasAC,
+        inUse: inUse,
+        registertionDate: Date.now()
+      });
+      //if valid..
+      apartment.save((err) => {
+        if(err) throw err;
+        console.log("Apartment created!");
+        res.json();
+      });
     },
     removeApartment(req,res,next){
       mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)

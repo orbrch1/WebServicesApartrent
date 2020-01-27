@@ -1,9 +1,9 @@
 const Offer  = require('../models/offer');
-
 const mongoose = require('mongoose');
 const mongodb = require('../database');
+let dateNow = new Date();
 
-function ValidateDates(tenantStartDate, tenantEndDate, landLordStartDate, landLordEndDate, currentDate) {    
+function validateDates(tenantStartDate, tenantEndDate, landLordStartDate, landLordEndDate, currentDate) {    
     //if(/^(\d{4})-(\d{1,2})-(\d{1,2})$/.test(tenantStartDate))   is validation needed ? since date is a type
     //  name == ' ' || name.length == 0 || FormData.name.value =="" ||  )) 
     if(!(Math.abs(tenantStartDate-landLordStartDate) < 0 || 
@@ -15,7 +15,7 @@ function ValidateDates(tenantStartDate, tenantEndDate, landLordStartDate, landLo
       return (false)
   }
 
-function ValidateUser(user) {
+function validateUser(user) {
     if(!(user == null ))
     {
         return (true)
@@ -27,6 +27,8 @@ function ValidateUser(user) {
 exports.offerController = {
   getAllOffers(req, res, next) {
     let result = [];
+    result.sort(function(a, b){return b - a});
+    //document.getElementById("demo").innerHTML = results;
     console.log("Received a request...");
     Offers.find({})
     .then(docs =>{
@@ -49,6 +51,7 @@ exports.offerController = {
       res.status(500).send(err.message);
     })
   },
+  
   addOffer(req, res, next) {
     console.log('new entity saved!');
     // const { body } = req;
@@ -60,16 +63,16 @@ exports.offerController = {
         const {
           id = null, // needed ???
           tenant = null,
-          landLord = null,
           tenantStartDate = null,
           tenantEndDate = null,
-          currentDate = new Date()
+          apartment=null,
+          currentDate = dateNow.now()
         } = req.body;
         console.log("req.body");
         console.log(req.body);
-        console.log(`id = ${id}, tenant = ${tenant}, landLord = ${landLord}, tenantStartDate = ${tenantStartDate}, tenantEndDate = ${tenantEndDate}, currentDate = ${currentDate}`);
-     //   if(ValidateDates(tenantStartDate, tenantEndDate, landLord.apartment.startDate, landLord.apartment.landLordEndDate, currentDate)   import aprt's dates
-     //   && ValidateUser(tenant) && ValidateUser(landLord))
+        console.log(`tenant = ${tenant}, tenantStartDate = ${tenantStartDate}, tenantEndDate = ${tenantEndDate}, currentDate = ${currentDate} , apartment=${apartment}`);
+    //    if(validateDates(tenantStartDate, tenantEndDate, landLordStartDate, landLordEndDate, currentDate)   import aprt's dates
+     //   && validateUser(tenant) && validateUser(landLord))
         {
           const offer = new Offer({id, tenant, landLord, tenantStartDate, tenantEndDate, currentDate});
           console.log(offer);
@@ -87,15 +90,16 @@ exports.offerController = {
         res.status(500).send(err);
       })
   },
+  
   editOffer(req,res,next){
     mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
     .then(async() => {
       const {id = null} = req.params;  
-      const {tenant = null, landLord = null, tenantStartDate = null, tenantEndDate = null, currentDate = new Date(),} = req.body; // null or existed value ?
-    //   if(ValidateDates(tenantStartDate, tenantEndDate, landLord.apartment.startDate, landLord.apartment.landLordEndDate, currentDate)   import aprt's dates
-    //   && ValidateUser(tenant) && ValidateUser(landLord)) 
+      const {tenant = null, tenantStartDate = null, tenantEndDate = null, currentDate = dateNow.now()} = req.body; // null or existed value ?
+     // if(validateDates(tenantStartDate, tenantEndDate, landLord.apartment.startDate, landLord.apartment.landLordEndDate, currentDate)   import aprt's dates
+    //   && validateUser(tenant) && validateUser(landLord)) 
       {
-        const result = await Offer.updateOne({_id: id}, {tenant, landLord, tenantStartDate, tenantEndDate, currentDate})  
+        const result = await Offer.updateOne({_id: id}, {tenant, landLord, tenantStartDate, tenantEndDate, startDate, endDate, currentDate})  
       }     
         
       if(result) res.json(result)

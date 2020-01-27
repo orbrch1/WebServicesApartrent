@@ -1,9 +1,9 @@
 const Express = require('express');
 const logger = require('morgan'); // NOTE: for debugging
-const   {userRouter} = require('./routers/userRouter');
+const   {userRouter} = require('./routers/userRouter'),
         // {reviewRouter } = require('./routers/reviewRouter'),
         // {orderRouter} = require('./routers/orderRouter'),
-        // {apartmentRouter} = require('./routers/apartmentRouter')
+        {apartmentRouter} = require('./routers/apartmentRouter')
 const app = Express();
 const port = process.env.PORT || 3000;
 
@@ -24,7 +24,7 @@ app.get(
 app.use('/user', userRouter);
 // app.use('/review', reviewRouter);
 // app.use('/order', orderRouter);
-// app.use('/apartment', apartmentRouter);
+app.use('/apartment', apartmentRouter);
 
 
 app.all('*', (req, res) => {

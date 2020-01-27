@@ -4,7 +4,7 @@ const Message  = require('../models/message');
 const mongoose = require('mongoose');
 const mongodb = require('../database');
 
-function ValidateContent(content) {
+function validateContent(content) {
     if(!(content == ' ' || content.length == 0 || FormData.content.value =="" || content.length < 10 || content.length > 200 ))
     {
       return (true)
@@ -13,7 +13,7 @@ function ValidateContent(content) {
       return (false)
   }
   
-  function ValidateUser(user) {
+  function validateUser(user) {
     if(!(user == null ))
     {
       return (true)
@@ -64,7 +64,7 @@ function ValidateContent(content) {
           console.log("req.body");
           console.log(req.body);
           console.log(`id = ${id}, content = ${content}, msgSender = ${msgSender}, msgReceiver = ${msgReceiver}, currentDate = ${currentDate}`);
-          if(ValidateContent(content) && ValidateUser(msgSender) && ValidateUser(msgReceiver))
+          if(validateContent(content) && validateUser(msgSender) && validateUser(msgReceiver))
           {
             const message = new message({id, content, msgSender, msgReceiver, currentDate});
             console.log(message);
@@ -115,5 +115,4 @@ function ValidateContent(content) {
         res.status(500).send(err);
       })
     }
-
    };

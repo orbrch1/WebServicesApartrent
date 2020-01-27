@@ -3,17 +3,17 @@ const mongoose = require('mongoose'),
         mongooseUniqueValidator = require('mongoose-unique-validator');
 
 const schema = new Schema ({
-    tenant: {type: Schema.Types.ObjectId, ref: 'User' ,required:true, unique: true},
-    tenantStartDate: {type:Date, require: true},
-    tenantEndDate: {type:Date, require: true},
     apartment:  {type: Schema.Types.ObjectId, ref: 'Apartment' ,required:true, unique: true},
+    startDate: {type:Date, require: true},
+    endDate: {type:Date, require: true},
+    pricePerDay: {type: Number ,required:true,},
     currentDate: {type:Date, require:true}
  }, {
-    collection: 'offers'
+    collection: 'publications'
 });
 
 schema.plugin(mongooseUniqueValidator);
 
-const Offer = mongoose.model('Offer', schema);
+const Publication = mongoose.model('Publication', schema);
 
-module.exports = Offer;
+module.exports = Publication;
