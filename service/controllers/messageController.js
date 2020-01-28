@@ -1,8 +1,7 @@
-const Message  = require('../models/message');
-// const User = require('../models/user'); is needed ? 
-
 const mongoose = require('mongoose');
 const mongodb = require('../database');
+
+const Message  = require('../models/message');
 
 function validateContent(content) {
     if(!(content == ' ' || content.length == 0 || FormData.content.value =="" || content.length < 10 || content.length > 200 ))
@@ -33,73 +32,122 @@ function validateContent(content) {
         })
         .catch(err => console.log(`query error: ${err}`));
     },
-    getMessageById(req, res, next) {
-      mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
-      .then(async() => {
-        const {id = null} = req.params;
-        const result = await Message.findOne({_id: id});
-  
-        if(result) res.json(result)
-        else res.status(404).send(`message with the id ${id} has not been found`);
+    getMessageByTenantId(req, res, next) {
+    let userIdAsObjectId = mongoose.Types.ObjectId(req.params.id);
+      Message.find({tenant: userIdAsObjectId})
+      .then(messageResult => {
+        // console.log(userResult);
+        return res.json(messageResult);
       })
-      .catch(err => {
-        console.error('some error occurred', err);
-        res.status(500).send(err.message);
-      })
+      .catch(err => console.log(`query error: ${err}`));
     },
+    getMessageByLandlordId(req, res, next) {
+      let userIdAsObjectId = mongoose.Types.ObjectId(req.params.id);
+        Message.find({landLord: userIdAsObjectId})
+        .then(messageResult => {
+          // console.log(userResult);
+          return res.json(messageResult);
+        })
+        .catch(err => console.log(`query error: ${err}`));
+      },
+    getMessageById(req, res, next) {
+      let messageIdAsObjectId = mongoose.Types.ObjectId(req.params.id);
+      Message.findOne({_id: messageIdAsObjectId})
+      .then(userResult => {
+      // console.log(userResult);
+      return res.json(userResult);
+    })
+    .catch(err => console.log(`query error: ${err}`));
+  },
+    //   mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
+    //   .then(async() => {
+    //     const {id = null} = req.params;
+    //     const result = await Message.findOne({_id: id});
+  
+    //     if(result) res.json(result)
+    //     else res.status(404).send(`message with the id ${id} has not been found`);
+    //   })
+    //   .catch(err => {
+    //     console.error('some error occurred', err);
+    //     res.status(500).send(err.message);
+    //   })
+    // },
+
     addMessage(req, res, next) {
       console.log('new entity saved!');
-      // const { body } = req;
-      // restaurant.push(body);
-      // res.send('new entity saved!');
 
-      mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
-        .then(async() => {
-          const {id = null,
-            content = null,
-            msgSender = null,
-            msgReceiver = null,
-            currentDate = new Date()
-          } = req.body;
-          console.log("req.body");
-          console.log(req.body);
-          console.log(`id = ${id}, content = ${content}, msgSender = ${msgSender}, msgReceiver = ${msgReceiver}, currentDate = ${currentDate}`);
-          if(validateContent(content) && validateUser(msgSender) && validateUser(msgReceiver))
-          {
-            const message = new message({id, content, msgSender, msgReceiver, currentDate});
-            console.log(message);
-            const result = await message.save();
-            console.log(result);
-          }
-          if(result) {
-            res.json(result);
-          }
-          else {
-            res.status(404).send('not found');
-          }
-        }).catch(err => {
-          console.error("Some error occured", err);
-          res.status(500).send(err);
-        })
-    },
+      const {
+        tenant = null,
+        landLord = null,
+        content = null
+       // registertionDate =    <<-- current date
+      } = req.body;
+      const message = new Message({
+      tenant: tenant,
+      landLord: landLord,
+      content: content,
+      currentDate: Date.now()
+    });
+    message.save((err) => {
+      if(err) throw err;
+      console.log("New message created!");
+      res.json();
+    });
+  },
     editMessage(req,res,next){
-      mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
-      .then(async() => {
-        const {id = null} = req.params;  
-        const {msgSender = null, content = null, msgReceiver = null, currentDate = new Date()} = req.body;
-        if(ValidateContent(content) && ValidateUser(msgSender) && ValidateUser(msgReceiver)){
-          const result = await Message.updateOne({_id: id}, {msgReceiver, msgSender, content, currentDate})   // _id with '_' because mongo generate it auto for us. format-> {generated id KEY : our id (null) VALUE, all the params to update}    
-        }     
+      let messageIdAsObjectId = mongoose.Types.ObjectId(req.params.id);
+
+    const {
+      tenant = null,
+      landLord = null,
+      content = null
+    } = req.body;
+
+    Message.updateOne({ _id: messageIdAsObjectId }, {
+      tenant: tenant,
+      landLord: landLord,
+      content: content,
+      currentDate: Date.now()
+      },
+      (err, result) => {
+      if (err)
+        throw err;
+      console.log(`Saved message: ${JSON.stringify(result)}`);
+      res.json();
+    });
+           
+      // mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
+      // .then(async() => {
+      //   const {id = null} = req.params;  
+      //   const {msgSender = null, content = null, msgReceiver = null, currentDate = new Date()} = req.body;
+      //   if(ValidateContent(content) && ValidateUser(msgSender) && ValidateUser(msgReceiver)){
+      //     const result = await Message.updateOne({_id: id}, {msgReceiver, msgSender, content, currentDate})   // _id with '_' because mongo generate it auto for us. format-> {generated id KEY : our id (null) VALUE, all the params to update}    
+      //   }     
           
-        if(result) res.json(result)
-        else res.status(404).send(`message with the id ${id} has not been found`);
-      })
-      .catch(err => {
-        console.error("Some error occured", err);
-        res.status(500).send(err);
-      })
+      //   if(result) res.json(result)
+      //   else res.status(404).send(`message with the id ${id} has not been found`);
+      // })
+      // .catch(err => {
+      //   console.error("Some error occured", err);
+      //   res.status(500).send(err);
+      // })
     },
     removeMessage(req,res,next){
+      let messageId = req.params.id;
+      // if(userId == null) res.status(404).send();
+      const conditions = { _id: messageId };
+      Message.deleteOne(conditions,(err, result) => {
+        if (err)
+          throw err;
+        // console.log(result);
+        if(result.deletedCount === 0) {
+          res.status(404).send();
+        }
+        else {
+          res.json();
+        }
+      });
+
       mongoose.connect(mongodb.mongoDbUrl, mongodb.mongoDbOptions)
       .then(async() => {
 

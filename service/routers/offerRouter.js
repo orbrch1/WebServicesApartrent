@@ -1,22 +1,17 @@
 const { Router } = require('express');
 const {
     offerController
-} = require('../controllers/reviewController');
+} = require('../controllers/offerController');
 
-const reviewRouter = new Router();
+const offerRouter = new Router();
 
-offerRouter.get('/offer/getAllOffers', offerController.getAllOffers);
-offerRouter.get('/offer/', offerController.getAllOffers);
-offerRouter.get('/offer/:id', offerController.getOfferById);
-offerRouter.post('/offer/', offerController.addOffer);
-offerRouter.put('/offer/:id', offerController.editOffer);
-offerRouter.delete('/offer/:id', offerController.removeOffer);
-
-// //settings
-// orderRouter.get('/:id', reviewController.get);
-// orderRouter.post('/', orderController.post);
-// orderRouter.put('/:id', orderController.put);
-// orderRouter.delete('/:id', orderController.delete);
+offerRouter.get('/getAllOffers', offerController.getAllOffers);
+offerRouter.get('/', offerController.getAllOffers);
+offerRouter.get('/id/:id', offerController.getOfferById);
+offerRouter.get('/user/:id', offerController.getOfferByUserId);
+offerRouter.post('/', offerController.addOffer);
+offerRouter.put('/:id', offerController.editOffer);
+offerRouter.delete('/:id', offerController.removeOffer);
 
 module.exports = {
     offerRouter,

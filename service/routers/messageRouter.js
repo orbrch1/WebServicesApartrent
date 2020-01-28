@@ -1,22 +1,18 @@
 const { Router } = require('express');
 const {
     messageController
-} = require('../controllers/reviewController');
+} = require('../controllers/messageController');
 
-const messageController = new Router();
+const messageRouter = new Router();
 
-messageRouter.get('/message/getAllOffers', messageController.getAllMessages);
-messageRouter.get('/message/', messageController.getAllOffers);
-messageRouter.get('/message/:id', messageController.getMessageById);
-messageRouter.post('/message/', messageController.addMessage);
-messageRouter.put('/message/:id', messageController.editMessage);
-messageRouter.delete('/message/:id', messageController.removeMessage);
-
-// //settings
-// orderRouter.get('/:id', reviewController.get);
-// orderRouter.post('/', orderController.post);
-// orderRouter.put('/:id', orderController.put);
-// orderRouter.delete('/:id', orderController.delete);
+messageRouter.get('/getAllMessages', messageController.getAllMessages); 
+messageRouter.get('/', messageController.getAllMessages);  
+messageRouter.get('/landlord/:id', messageController.getMessageByLandlordId);
+messageRouter.get('/tenant/:id', messageController.getMessageByTenantId);
+messageRouter.get('/id/:id', messageController.getMessageById); 
+messageRouter.post('/', messageController.addMessage);
+messageRouter.put('/:id', messageController.editMessage);
+messageRouter.delete('/:id', messageController.removeMessage);
 
 module.exports = {
     messageRouter,

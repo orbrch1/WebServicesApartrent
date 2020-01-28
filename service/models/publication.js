@@ -3,6 +3,7 @@ const mongoose = require('mongoose'),
         mongooseUniqueValidator = require('mongoose-unique-validator');
 
 const schema = new Schema ({
+    landLord: {type: Schema.Types.ObjectId, ref: 'User' ,required:true, unique: true},
     apartment:  {type: Schema.Types.ObjectId, ref: 'Apartment' ,required:true, unique: true},
     startDate: {type:Date, require: true},
     endDate: {type:Date, require: true},

@@ -5,14 +5,14 @@ const {
 
 const orderRouter = new Router();
 
-orderRouter.get('/order/getAllOrders', orderController.getAllOrders);
-orderRouter.get('/order/getAllOrdersByTenant', orderController.getAllOrdersByTenant);
-orderRouter.get('/order/getAllOrdersByLandlord', orderController.getAllOrdersByLandlord);
-orderRouter.get('/order/', orderController.getAllOrders);
-orderRouter.get('/order/:id', orderController.getOrderById);
-orderRouter.post('/order/', orderController.addOrder);
-orderRouter.put('/order/:id', orderController.editOrder);
-orderRouter.delete('/order/:id', orderController.removeOrder);
+orderRouter.get('/getAllOrders', orderController.getAllOrders);
+orderRouter.get('/', orderController.getAllOrders);
+orderRouter.get('/tenant/:id', orderController.getAllOrdersByTenant);
+orderRouter.get('/landlord/:id', orderController.getAllOrdersByLandlord);
+orderRouter.get('/:id', orderController.getOrderById);
+orderRouter.post('/', orderController.addOrder);
+orderRouter.put('/:id', orderController.editOrder);
+orderRouter.delete('/:id', orderController.removeOrder);
 
 module.exports = {
     orderRouter,

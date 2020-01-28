@@ -1,9 +1,12 @@
 const Express = require('express');
 const logger = require('morgan'); // NOTE: for debugging
 const   {userRouter} = require('./routers/userRouter'),
-        // {reviewRouter } = require('./routers/reviewRouter'),
-        // {orderRouter} = require('./routers/orderRouter'),
-        {apartmentRouter} = require('./routers/apartmentRouter')
+        {reviewRouter} = require('./routers/reviewRouter'),
+        {orderRouter} = require('./routers/orderRouter'),
+        {offerRouter} = require('./routers/offerRouter'),
+        {messageRouter} = require('./routers/messageRouter'),
+        {apartmentRouter} = require('./routers/apartmentRouter'),
+        {publicationRouter} = require('./routers/publicationRouter')
 const app = Express();
 const port = process.env.PORT || 3000;
 
@@ -22,10 +25,12 @@ app.get(
 
 //app.use('/user/*', userRouter);
 app.use('/user', userRouter);
-// app.use('/review', reviewRouter);
-// app.use('/order', orderRouter);
+app.use('/message', messageRouter);
+app.use('/review', reviewRouter);
+app.use('/order', orderRouter);
+app.use('/offer', offerRouter);
 app.use('/apartment', apartmentRouter);
-
+app.use('/publication', publicationRouter);
 
 app.all('*', (req, res) => {
   res.status(404).send('Unsupported Route!');
@@ -39,21 +44,3 @@ app.use((err, req, res, next) => {
    
 app.listen(port, () => console.log('Express server is running on port ', port));
 
-// <!DOCTYPE html>
-// <html>
-// <head>
-//     <title>current apartment</title>
-//     <meta charset="uft-8"/>
-//     <link rel="stylesheet" type="text/css" href="css/style.css"></link>
-//     <script type="text/javascript" src="js/jquery.min.js"></script>
-//     <script type="text/javascript" src="js/script.js"></script>
-// </head>
-// <body>
-//     <h2 id="address" class="address"> Enter address below</h2>
-//     <form id="form-container" class="form-container">
-//         <label for="street">Street </label><input type="text" id="street" value=""></input>
-//         <label for="city">City </label><input type="text" id="city" value=""></input>
-//         <label for="country">Country </label><input type="text" id="Country" value=""><img class="photo" id="photo"></img></input>      
-//     </form>
-// </body> 
-// </html>

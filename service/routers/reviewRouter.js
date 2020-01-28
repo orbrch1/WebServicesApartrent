@@ -5,12 +5,12 @@ const {
 
 const reviewRouter = new Router();
 
-reviewRouter.get('/review/getAllReviews', reviewController.getAllReviews);
-reviewRouter.get('/review/', reviewController.getAllReviews);
-reviewRouter.get('/review/:id', reviewController.getReviewById);
-reviewRouter.post('/review/', reviewController.addReview);
-reviewRouter.put('/review/:id', reviewController.editReview);
-reviewRouter.delete('/review/:id', reviewController.removeReview);
+reviewRouter.get('/getAllReviews', reviewController.getAllReviews);
+reviewRouter.get('/', reviewController.getAllReviews);
+reviewRouter.get('/:id', reviewController.getReviewById);
+reviewRouter.post('/', reviewController.addReview);
+reviewRouter.put('/:id', reviewController.editReview);
+reviewRouter.delete('/:id', reviewController.removeReview);
 
 // //settings
 // orderRouter.get('/:id', reviewController.get);

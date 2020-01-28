@@ -3,8 +3,8 @@ const mongoose = require('mongoose'),
         mongooseUniqueValidator = require('mongoose-unique-validator');
 
 const schema = new Schema ({
-    msgReceiver: {type: Schema.Types.ObjectId, ref: 'User' ,required:true, unique: true},
-    msgSender: {type: Schema.Types.ObjectId, ref: 'User' ,required:true, unique: true},
+    landlord: {type: Schema.Types.ObjectId, ref: 'User',unique: true, required:true},
+    tenant: {type: Schema.Types.ObjectId, ref: 'User', unique: true, required:true },
     content: {type:String, required:true},
     currentDate: {type:Date, require:true}
      }, {
